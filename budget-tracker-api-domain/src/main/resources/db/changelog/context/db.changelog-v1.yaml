@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 000_initial_migration.sql
+      author: alebiadz
+      comment: Initial migration
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/000_initial_migration.sql
+
+  - changeSet:
+      id: 001_create_users_table.sql
+      author: alebiadz
+      comment: Create users table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/001_create_users_table.sql
+
+  - changeSet:
+      id: 002_create_refresh_tokens_table.sql
+      author: alebiadz
+      comment: Create refresh_tokens table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/002_create_refresh_tokens_table.sql

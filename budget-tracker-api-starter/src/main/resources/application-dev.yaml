@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/budget_tracker
+    username: postgres
+    password: root
+budget:
+  tracker:
+    jwt:
+      access-token-secret:
+      refresh-token-secret:
