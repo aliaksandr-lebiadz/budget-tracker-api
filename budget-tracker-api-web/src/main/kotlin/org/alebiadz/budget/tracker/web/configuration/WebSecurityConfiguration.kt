@@ -1,9 +1,10 @@
 package org.alebiadz.budget.tracker.web.configuration
 
-import org.alebiadz.budget.tracker.web.meta.Navigation
 import org.alebiadz.budget.tracker.service.authentication.AuthenticationService
+import org.alebiadz.budget.tracker.service.meta.UserMeta
 import org.alebiadz.budget.tracker.web.filter.AuthenticationFilter
 import org.alebiadz.budget.tracker.web.filter.AuthorizationFilter
+import org.alebiadz.budget.tracker.web.meta.Navigation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -48,6 +49,7 @@ class WebSecurityConfiguration(
         http.cors().configurationSource { CorsConfiguration().applyPermitDefaultValues() }
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.authorizeRequests().antMatchers(Navigation.USER_PATH_PATTERN, contextPath + Navigation.USER_PATH_PATTERN).permitAll()
+        http.authorizeRequests().antMatchers("/hello/admin").hasRole(UserMeta.ADMIN.uppercase())
         http.authorizeRequests().anyRequest().authenticated()
 
         http.addFilter(createAuthenticationFilter(authenticationManager))

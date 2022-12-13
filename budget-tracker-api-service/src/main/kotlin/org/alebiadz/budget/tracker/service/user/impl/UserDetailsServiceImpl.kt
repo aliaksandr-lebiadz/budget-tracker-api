@@ -1,6 +1,7 @@
 package org.alebiadz.budget.tracker.service.user.impl
 
 import org.alebiadz.budget.tracker.domain.repository.UserRepository
+import org.alebiadz.budget.tracker.service.utils.UserUtils
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -17,6 +18,7 @@ class UserDetailsServiceImpl(private val repository: UserRepository) : UserDetai
         }
 
         val user = repository.findByUsername(username)?: throw UsernameNotFoundException("User with username $username not found")
-        return User(user.username, user.password, emptySet())
+        val authorities = UserUtils.getAuthorities(user.admin)
+        return User(user.username, user.password, authorities)
     }
 }

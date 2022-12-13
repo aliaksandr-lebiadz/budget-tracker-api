@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 000_initial_migration.sql
+      id: 000_initial_migration
       author: alebiadz
       comment: Initial migration
       changes:
@@ -8,7 +8,7 @@ databaseChangeLog:
             path: db/changelog/sql/v1/000_initial_migration.sql
 
   - changeSet:
-      id: 001_create_users_table.sql
+      id: 001_create_users_table
       author: alebiadz
       comment: Create users table
       changes:
@@ -16,9 +16,17 @@ databaseChangeLog:
             path: db/changelog/sql/v1/001_create_users_table.sql
 
   - changeSet:
-      id: 002_create_refresh_tokens_table.sql
+      id: 002_create_refresh_tokens_table
       author: alebiadz
       comment: Create refresh_tokens table
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/002_create_refresh_tokens_table.sql
+
+  - changeSet:
+      id: 003_add_admin_column_to_users
+      author: alebiadz
+      comment: Add admin column to users table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/003_add_admin_column_to_users.sql

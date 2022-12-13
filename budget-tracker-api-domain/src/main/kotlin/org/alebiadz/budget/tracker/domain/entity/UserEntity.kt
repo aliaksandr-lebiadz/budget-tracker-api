@@ -11,8 +11,9 @@ import javax.persistence.Table
 data class UserEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
     var username: String,
-    var password: String
+    var password: String,
+    var admin: Boolean,
 ) {
 
-    constructor(username: String, password: String) : this(null, username, password)
+    constructor(username: String, password: String) : this(null, username, password, false)
 }

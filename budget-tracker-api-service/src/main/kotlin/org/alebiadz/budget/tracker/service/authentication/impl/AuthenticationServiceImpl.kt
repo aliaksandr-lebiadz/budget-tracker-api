@@ -8,6 +8,8 @@ import org.alebiadz.budget.tracker.dto.user.UserCredentialsDto
 import org.alebiadz.budget.tracker.dto.user.UserTokensDto
 import org.alebiadz.budget.tracker.service.authentication.AuthenticationService
 import org.alebiadz.budget.tracker.service.authentication.JWTService
+import org.alebiadz.budget.tracker.service.meta.UserMeta
+import org.alebiadz.budget.tracker.service.utils.UserUtils
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
@@ -26,15 +28,19 @@ class AuthenticationServiceImpl(
 
     override fun getAuthenticationToken(accessToken: String): Authentication {
 
-        val username = jwtService.decodeAccessToken(accessToken)
-        return UsernamePasswordAuthenticationToken(username, null, emptyList())
+        val (username, admin) = jwtService.decodeAccessToken(accessToken)
+        val authorities = UserUtils.getAuthorities(admin)
+        return UsernamePasswordAuthenticationToken(username, null, authorities)
     }
 
     override fun generateTokens(authentication: Authentication): UserTokensDto {
 
-        val username = (authentication.principal as User).username
-        val accessToken = jwtService.generateAccessToken(username)
-        val refreshToken = jwtService.generateRefreshToken(username)
+        val user = authentication.principal as User
+        val username = user.username
+        val admin = isAdmin(user)
+
+        val accessToken = jwtService.generateAccessToken(username, admin)
+        val refreshToken = jwtService.generateRefreshToken(username, admin)
         val refreshTokenEntity = refreshTokenRepository.findByUsername(username)
             ?.copy(token = refreshToken)
             ?: RefreshTokenEntity(username, refreshToken)
@@ -45,12 +51,19 @@ class AuthenticationServiceImpl(
 
     override fun refreshAccessToken(refreshToken: String): String {
 
-        val username = jwtService.decodeRefreshToken(refreshToken)
+        val (username, admin) = jwtService.decodeRefreshToken(refreshToken)
         val refreshTokenEntity = refreshTokenRepository.findByUsername(username) ?: throw NotFoundException(username, RefreshTokenEntity::class)
         if (refreshTokenEntity.token != refreshToken) {
             throw BudgetTrackerException("Refresh tokens mismatch")
         }
 
-        return jwtService.generateAccessToken(username)
+        return jwtService.generateAccessToken(username, admin)
+    }
+
+    private fun isAdmin(user: User): Boolean {
+
+        return user.authorities.stream()
+            .map { it.authority }
+            .anyMatch { it.equals(UserMeta.ROLE_ADMIN) }
     }
 }

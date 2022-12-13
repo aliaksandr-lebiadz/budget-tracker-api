@@ -14,4 +14,10 @@ class HelloController {
 
         return ResponseEntity.ok("hello")
     }
+
+    @GetMapping("/admin")
+    fun helloAdmin(): ResponseEntity<*> {
+
+        return ResponseEntity.ok("hello, admin")
+    }
 }
