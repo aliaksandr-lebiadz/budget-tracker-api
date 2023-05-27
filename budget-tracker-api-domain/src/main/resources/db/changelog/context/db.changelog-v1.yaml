@@ -30,3 +30,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/003_add_admin_column_to_users.sql
+
+  - changeSet:
+      id: 004_add_currencies_table
+      author: alebiadz
+      comment: Add currencies table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/004_add_currencies_table.sql

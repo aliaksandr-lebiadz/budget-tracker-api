@@ -7,13 +7,12 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "users")
-data class UserEntity(
+@Table(name = "currencies")
+data class CurrencyEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long?,
-    var username: String,
-    var password: String,
-    var admin: Boolean,
+    val name: String,
+    val code: String
 ) : JpaEntity {
 
-    constructor(username: String, password: String) : this(null, username, password, false)
+    constructor(name: String, code: String) : this(null, name, code)
 }

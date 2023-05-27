@@ -8,6 +8,7 @@ import org.alebiadz.budget.tracker.web.meta.Navigation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -46,10 +47,10 @@ class WebSecurityConfiguration(
     fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
 
         http.csrf().disable()
-        http.cors().configurationSource { CorsConfiguration().applyPermitDefaultValues() }
+        http.cors().configurationSource { corsConfiguration() }
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.authorizeRequests().antMatchers(Navigation.USER_PATH_PATTERN, contextPath + Navigation.USER_PATH_PATTERN).permitAll()
-        http.authorizeRequests().antMatchers("/hello/admin").hasRole(UserMeta.ADMIN.uppercase())
+        http.authorizeRequests().antMatchers(Navigation.CURRENCY_PATTERN).hasRole(UserMeta.ADMIN.uppercase())
         http.authorizeRequests().anyRequest().authenticated()
 
         http.addFilter(createAuthenticationFilter(authenticationManager))
@@ -68,5 +69,12 @@ class WebSecurityConfiguration(
     private fun createAuthorizationFilter(): AuthorizationFilter {
 
         return AuthorizationFilter(authenticationService)
+    }
+
+    private fun corsConfiguration(): CorsConfiguration {
+
+        val configuration = CorsConfiguration()
+        HttpMethod.values().forEach { configuration.addAllowedMethod(it) }
+        return configuration.applyPermitDefaultValues()
     }
 }
