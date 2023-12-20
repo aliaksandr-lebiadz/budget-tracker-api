@@ -5,6 +5,7 @@ object Navigation {
     // controllers:
     const val USER = "/user"
     const val CURRENCY = "/currency"
+    const val CARD_TYPE = "/card-type"
 
     // variables:
     const val ID = "id"
@@ -19,5 +20,6 @@ object Navigation {
     // patterns:
     const val USER_PATH_PATTERN = "$USER/**"
     const val CURRENCY_PATTERN = "$CURRENCY/**"
+    const val CARD_TYPE_PATTERN = "$CARD_TYPE/**"
 
 }

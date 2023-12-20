@@ -7,6 +7,7 @@ import org.alebiadz.budget.tracker.domain.entity.CurrencyEntity
 import org.alebiadz.budget.tracker.domain.repository.CurrencyRepository
 import org.alebiadz.budget.tracker.dto.currency.CurrencyDto
 import org.alebiadz.budget.tracker.service.currency.CurrencyService
+import org.alebiadz.budget.tracker.service.utils.copy
 import org.alebiadz.budget.tracker.service.utils.toDto
 import org.alebiadz.budget.tracker.service.utils.toEntity
 import org.springframework.data.repository.findByIdOrNull
@@ -33,10 +34,8 @@ class CurrencyServiceImpl(private val repository: CurrencyRepository) : Currency
         val id = currency.id ?: throw ObjectNullException("id")
         val entity = repository.findByIdOrNull(id)
             ?.also { validateUniqueness(currency, it) }
-            ?.copy(
-                name = currency.name,
-                code = currency.code
-            ) ?: throw NotFoundException(id, CurrencyEntity::class)
+            ?.copy(currency)
+            ?: throw NotFoundException(id, CurrencyEntity::class)
         repository.save(entity)
     }
 

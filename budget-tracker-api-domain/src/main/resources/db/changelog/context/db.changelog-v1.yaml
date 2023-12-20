@@ -38,3 +38,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/004_add_currencies_table.sql
+
+  - changeSet:
+      id: 005_add_card_types_table
+      author: alebiadz
+      comment: Add card types table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/005_add_card_types_table.sql
