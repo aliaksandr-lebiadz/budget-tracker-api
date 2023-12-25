@@ -46,3 +46,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/005_add_card_types_table.sql
+
+  - changeSet:
+      id: 006_add_banks_table
+      author: alebiadz
+      comment: Add banks table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/006_add_banks_table.sql

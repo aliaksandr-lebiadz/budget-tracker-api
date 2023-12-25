@@ -50,7 +50,11 @@ class WebSecurityConfiguration(
         http.cors().configurationSource { corsConfiguration() }
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.authorizeRequests().antMatchers(Navigation.USER_PATH_PATTERN, contextPath + Navigation.USER_PATH_PATTERN).permitAll()
-        http.authorizeRequests().antMatchers(Navigation.CURRENCY_PATTERN, Navigation.CARD_TYPE_PATTERN).hasRole(UserMeta.ADMIN.uppercase())
+        http.authorizeRequests().antMatchers(
+            Navigation.CURRENCY_PATTERN,
+            Navigation.CARD_TYPE_PATTERN,
+            Navigation.BANK_PATTERN,
+        ).hasRole(UserMeta.ADMIN.uppercase())
         http.authorizeRequests().anyRequest().authenticated()
 
         http.addFilter(createAuthenticationFilter(authenticationManager))

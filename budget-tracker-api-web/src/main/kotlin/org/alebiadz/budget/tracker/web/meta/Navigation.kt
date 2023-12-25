@@ -6,6 +6,7 @@ object Navigation {
     const val USER = "/user"
     const val CURRENCY = "/currency"
     const val CARD_TYPE = "/card-type"
+    const val BANK = "/bank"
 
     // variables:
     const val ID = "id"
@@ -21,5 +22,5 @@ object Navigation {
     const val USER_PATH_PATTERN = "$USER/**"
     const val CURRENCY_PATTERN = "$CURRENCY/**"
     const val CARD_TYPE_PATTERN = "$CARD_TYPE/**"
-
+    const val BANK_PATTERN = "$BANK/**"
 }
