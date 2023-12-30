@@ -18,7 +18,7 @@ class CardTypeServiceImpl(private val repository: CardTypeRepository) : CardType
 
     override fun getCardTypes(): List<CardTypeDto> {
 
-        return repository.findAllOrdered().map { it.toDto() }
+        return repository.findAll().map { it.toDto() }
     }
 
     override fun addCardType(cardType: CardTypeDto): Long {

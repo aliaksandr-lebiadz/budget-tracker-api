@@ -18,7 +18,7 @@ class CurrencyServiceImpl(private val repository: CurrencyRepository) : Currency
 
     override fun getCurrencies(): List<CurrencyDto> {
 
-        return repository.findAllOrdered().map { it.toDto() }
+        return repository.findAll().map { it.toDto() }
     }
 
     override fun addCurrency(currency: CurrencyDto): Long {

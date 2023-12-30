@@ -18,7 +18,7 @@ class BankServiceImpl(private val repository: BankRepository) : BankService {
 
     override fun getBanks(): List<BankDto> {
 
-        return repository.findAllOrdered().map { it.toDto() }
+        return repository.findAll().map { it.toDto() }
     }
 
     override fun addBank(bank: BankDto): Long {
