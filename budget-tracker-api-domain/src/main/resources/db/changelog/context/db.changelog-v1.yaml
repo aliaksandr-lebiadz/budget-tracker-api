@@ -54,3 +54,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/006_add_banks_table.sql
+
+  - changeSet:
+      id: 007_replace_username_with_user_id_in_refresh_tokens_table
+      author: alebiadz
+      comment: Replace username with user id in refresh tokens table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/007_replace_username_with_user_id_in_refresh_tokens_table.sql

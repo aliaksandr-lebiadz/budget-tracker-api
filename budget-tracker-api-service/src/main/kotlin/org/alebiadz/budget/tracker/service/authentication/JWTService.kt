@@ -1,14 +1,14 @@
 package org.alebiadz.budget.tracker.service.authentication
 
-import org.alebiadz.budget.tracker.dto.user.DecodedUserInfoDto
+import org.alebiadz.budget.tracker.dto.user.JwtUserDto
 
 interface JWTService {
 
-    fun generateAccessToken(username: String, admin: Boolean): String
+    fun generateAccessToken(user: JwtUserDto): String
 
-    fun generateRefreshToken(username: String, admin: Boolean): String
+    fun generateRefreshToken(user: JwtUserDto): String
 
-    fun decodeAccessToken(token: String): DecodedUserInfoDto
+    fun decodeAccessToken(token: String): JwtUserDto
 
-    fun decodeRefreshToken(token: String): DecodedUserInfoDto
+    fun decodeRefreshToken(token: String): JwtUserDto
 }

@@ -4,5 +4,6 @@ object UserMeta {
 
         const val ROLE_ADMIN = "ROLE_ADMIN"
         const val ADMIN = "admin"
+        const val USERNAME = "username"
 
 }

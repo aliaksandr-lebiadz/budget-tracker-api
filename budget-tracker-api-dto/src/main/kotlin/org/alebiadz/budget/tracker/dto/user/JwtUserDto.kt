@@ -1,6 +1,7 @@
 package org.alebiadz.budget.tracker.dto.user
 
-data class DecodedUserInfoDto(
+data class JwtUserDto(
+    val id: Long,
     val username: String,
-    val admin: Boolean
+    val admin: Boolean,
 )

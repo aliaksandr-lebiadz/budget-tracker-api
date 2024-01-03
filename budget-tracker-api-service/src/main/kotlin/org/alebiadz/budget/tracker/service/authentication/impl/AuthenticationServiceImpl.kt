@@ -4,11 +4,13 @@ import org.alebiadz.budget.tracker.commons.exception.BudgetTrackerException
 import org.alebiadz.budget.tracker.commons.exception.NotFoundException
 import org.alebiadz.budget.tracker.domain.entity.RefreshTokenEntity
 import org.alebiadz.budget.tracker.domain.repository.RefreshTokenRepository
+import org.alebiadz.budget.tracker.dto.user.JwtUserDto
 import org.alebiadz.budget.tracker.dto.user.UserCredentialsDto
 import org.alebiadz.budget.tracker.dto.user.UserTokensDto
 import org.alebiadz.budget.tracker.service.authentication.AuthenticationService
 import org.alebiadz.budget.tracker.service.authentication.JWTService
 import org.alebiadz.budget.tracker.service.meta.UserMeta
+import org.alebiadz.budget.tracker.service.user.JwtUser
 import org.alebiadz.budget.tracker.service.utils.UserUtils
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -28,22 +30,23 @@ class AuthenticationServiceImpl(
 
     override fun getAuthenticationToken(accessToken: String): Authentication {
 
-        val (username, admin) = jwtService.decodeAccessToken(accessToken)
-        val authorities = UserUtils.getAuthorities(admin)
-        return UsernamePasswordAuthenticationToken(username, null, authorities)
+        val user = jwtService.decodeAccessToken(accessToken)
+        val authorities = UserUtils.getAuthorities(user.admin)
+        return UsernamePasswordAuthenticationToken(user.id, null, authorities)
     }
 
     override fun generateTokens(authentication: Authentication): UserTokensDto {
 
-        val user = authentication.principal as User
-        val username = user.username
+        val user = authentication.principal as JwtUser
+        val userId = user.id
         val admin = isAdmin(user)
+        val jwtUser = JwtUserDto(userId, user.username, admin)
 
-        val accessToken = jwtService.generateAccessToken(username, admin)
-        val refreshToken = jwtService.generateRefreshToken(username, admin)
-        val refreshTokenEntity = refreshTokenRepository.findByUsername(username)
+        val accessToken = jwtService.generateAccessToken(jwtUser)
+        val refreshToken = jwtService.generateRefreshToken(jwtUser)
+        val refreshTokenEntity = refreshTokenRepository.findByUserId(userId)
             ?.copy(token = refreshToken)
-            ?: RefreshTokenEntity(username, refreshToken)
+            ?: RefreshTokenEntity(userId, refreshToken)
         refreshTokenRepository.save(refreshTokenEntity)
 
         return UserTokensDto(accessToken, refreshToken)
@@ -51,13 +54,14 @@ class AuthenticationServiceImpl(
 
     override fun refreshAccessToken(refreshToken: String): String {
 
-        val (username, admin) = jwtService.decodeRefreshToken(refreshToken)
-        val refreshTokenEntity = refreshTokenRepository.findByUsername(username) ?: throw NotFoundException(username, RefreshTokenEntity::class)
+        val user = jwtService.decodeRefreshToken(refreshToken)
+        val userId = user.id
+        val refreshTokenEntity = refreshTokenRepository.findByUserId(userId) ?: throw NotFoundException(userId, RefreshTokenEntity::class)
         if (refreshTokenEntity.token != refreshToken) {
             throw BudgetTrackerException("Refresh tokens mismatch")
         }
 
-        return jwtService.generateAccessToken(username, admin)
+        return jwtService.generateAccessToken(user)
     }
 
     private fun isAdmin(user: User): Boolean {

@@ -10,9 +10,9 @@ import javax.persistence.Table
 @Table(name = "refresh_tokens")
 data class RefreshTokenEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long?,
-    var username: String,
+    val userId: Long,
     val token: String
 ) : JpaEntity {
 
-    constructor(username: String, token: String) : this(null, username, token)
+    constructor(userId: Long, token: String) : this(null, userId, token)
 }
