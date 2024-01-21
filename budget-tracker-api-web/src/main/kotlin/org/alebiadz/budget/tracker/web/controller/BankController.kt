@@ -4,6 +4,7 @@ import org.alebiadz.budget.tracker.dto.bank.BankDto
 import org.alebiadz.budget.tracker.service.bank.BankService
 import org.alebiadz.budget.tracker.web.meta.Navigation
 import org.alebiadz.budget.tracker.web.security.RequiresAdminRole
+import org.alebiadz.budget.tracker.web.security.RequiresAuthentication
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +18,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(Navigation.BANK)
-@RequiresAdminRole
+@RequiresAuthentication
 class BankController(private val service: BankService) {
 
     @GetMapping
@@ -28,6 +29,7 @@ class BankController(private val service: BankService) {
     }
 
     @PostMapping
+    @RequiresAdminRole
     fun addBank(@Valid @RequestBody bank: BankDto): ResponseEntity<*> {
 
         val id = service.addBank(bank)
@@ -35,6 +37,7 @@ class BankController(private val service: BankService) {
     }
 
     @PutMapping
+    @RequiresAdminRole
     fun changeBank(@Valid @RequestBody bank: BankDto): ResponseEntity<*> {
 
         service.changeBank(bank)
@@ -42,6 +45,7 @@ class BankController(private val service: BankService) {
     }
 
     @DeleteMapping(Navigation.BY_ID)
+    @RequiresAdminRole
     fun deleteBankById(@PathVariable(Navigation.ID) id: Long): ResponseEntity<*> {
 
         service.deleteBankById(id)

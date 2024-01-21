@@ -4,6 +4,7 @@ import org.alebiadz.budget.tracker.dto.card.type.CardTypeDto
 import org.alebiadz.budget.tracker.service.card.type.CardTypeService
 import org.alebiadz.budget.tracker.web.meta.Navigation
 import org.alebiadz.budget.tracker.web.security.RequiresAdminRole
+import org.alebiadz.budget.tracker.web.security.RequiresAuthentication
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +18,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(Navigation.CARD_TYPE)
-@RequiresAdminRole
+@RequiresAuthentication
 class CardTypeController(private val service: CardTypeService) {
 
     @GetMapping
@@ -28,6 +29,7 @@ class CardTypeController(private val service: CardTypeService) {
     }
 
     @PostMapping
+    @RequiresAdminRole
     fun addCardType(@Valid @RequestBody cardType: CardTypeDto): ResponseEntity<*> {
 
         val id = service.addCardType(cardType)
@@ -35,6 +37,7 @@ class CardTypeController(private val service: CardTypeService) {
     }
 
     @PutMapping
+    @RequiresAdminRole
     fun changeCardType(@Valid @RequestBody cardType: CardTypeDto): ResponseEntity<*> {
 
         service.changeCardType(cardType)
@@ -42,6 +45,7 @@ class CardTypeController(private val service: CardTypeService) {
     }
 
     @DeleteMapping(Navigation.BY_ID)
+    @RequiresAdminRole
     fun deleteCardTypeById(@PathVariable(Navigation.ID) id: Long): ResponseEntity<*> {
 
         service.deleteCardTypeById(id)
