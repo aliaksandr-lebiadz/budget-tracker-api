@@ -68,6 +68,6 @@ class AuthenticationServiceImpl(
 
         return user.authorities.stream()
             .map { it.authority }
-            .anyMatch { it.equals(UserMeta.ROLE_ADMIN) }
+            .anyMatch { it.equals(UserMeta.ADMIN_ROLE) }
     }
 }

@@ -2,7 +2,7 @@ package org.alebiadz.budget.tracker.domain.repository
 
 import org.alebiadz.budget.tracker.domain.entity.CurrencyEntity
 
-interface CurrencyRepository : JpaRepository<CurrencyEntity> {
+interface CurrencyRepository : GeneralJpaRepository<CurrencyEntity> {
 
     fun existsByName(name: String): Boolean
 

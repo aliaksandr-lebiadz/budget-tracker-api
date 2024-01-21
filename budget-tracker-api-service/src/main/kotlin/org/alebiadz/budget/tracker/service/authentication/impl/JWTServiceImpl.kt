@@ -16,7 +16,7 @@ class JWTServiceImpl(private val configuration: BudgetTrackerConfiguration) : JW
 
     companion object {
 
-        private val ACCESS_TOKEN_LIFETIME = Duration.of(10, ChronoUnit.SECONDS)
+        private val ACCESS_TOKEN_LIFETIME = Duration.of(5, ChronoUnit.MINUTES)
         private val REFRESH_TOKEN_LIFETIME = Duration.of(30, ChronoUnit.DAYS)
     }
 

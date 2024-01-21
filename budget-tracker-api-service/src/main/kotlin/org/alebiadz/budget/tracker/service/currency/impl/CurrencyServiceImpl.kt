@@ -5,16 +5,19 @@ import org.alebiadz.budget.tracker.commons.exception.NotFoundException
 import org.alebiadz.budget.tracker.commons.exception.ObjectNullException
 import org.alebiadz.budget.tracker.domain.entity.CurrencyEntity
 import org.alebiadz.budget.tracker.domain.repository.CurrencyRepository
+import org.alebiadz.budget.tracker.dto.account.AccountFilter
 import org.alebiadz.budget.tracker.dto.currency.CurrencyDto
+import org.alebiadz.budget.tracker.service.account.AccountAdminService
 import org.alebiadz.budget.tracker.service.currency.CurrencyService
 import org.alebiadz.budget.tracker.service.utils.copy
 import org.alebiadz.budget.tracker.service.utils.toDto
 import org.alebiadz.budget.tracker.service.utils.toEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CurrencyServiceImpl(private val repository: CurrencyRepository) : CurrencyService {
+class CurrencyServiceImpl(private val repository: CurrencyRepository, private val accountAdminService: AccountAdminService) : CurrencyService {
 
     override fun getCurrencies(): List<CurrencyDto> {
 
@@ -39,8 +42,13 @@ class CurrencyServiceImpl(private val repository: CurrencyRepository) : Currency
         repository.save(entity)
     }
 
+    @Transactional
     override fun deleteCurrencyById(id: Long) {
 
+        val accountsFilter = AccountFilter.Builder().currencyId(id).build()
+        val accountIds = accountAdminService.getAccounts(accountsFilter).map { it.id }.toSet()
+
+        accountAdminService.deleteAccounts(accountIds)
         repository.deleteById(id)
     }
 

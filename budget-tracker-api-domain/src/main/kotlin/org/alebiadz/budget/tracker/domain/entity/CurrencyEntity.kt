@@ -9,9 +9,13 @@ import javax.persistence.Table
 @Entity
 @Table(name = "currencies")
 data class CurrencyEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long?,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    override var id: Long?,
+
     val name: String,
-    val code: String
+
+    val code: String,
 ) : JpaEntity {
 
     constructor(name: String, code: String) : this(null, name, code)

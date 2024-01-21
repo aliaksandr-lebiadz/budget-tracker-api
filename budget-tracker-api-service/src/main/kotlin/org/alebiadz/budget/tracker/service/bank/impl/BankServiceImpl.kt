@@ -5,16 +5,19 @@ import org.alebiadz.budget.tracker.commons.exception.NotFoundException
 import org.alebiadz.budget.tracker.commons.exception.ObjectNullException
 import org.alebiadz.budget.tracker.domain.entity.BankEntity
 import org.alebiadz.budget.tracker.domain.repository.BankRepository
+import org.alebiadz.budget.tracker.dto.account.AccountFilter
 import org.alebiadz.budget.tracker.dto.bank.BankDto
+import org.alebiadz.budget.tracker.service.account.AccountAdminService
 import org.alebiadz.budget.tracker.service.bank.BankService
 import org.alebiadz.budget.tracker.service.utils.copy
 import org.alebiadz.budget.tracker.service.utils.toDto
 import org.alebiadz.budget.tracker.service.utils.toEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class BankServiceImpl(private val repository: BankRepository) : BankService {
+class BankServiceImpl(private val repository: BankRepository, private val accountAdminService: AccountAdminService) : BankService {
 
     override fun getBanks(): List<BankDto> {
 
@@ -39,8 +42,13 @@ class BankServiceImpl(private val repository: BankRepository) : BankService {
         repository.save(entity)
     }
 
+    @Transactional
     override fun deleteBankById(id: Long) {
 
+        val accountsFilter = AccountFilter.Builder().bankId(id).build()
+        val accountIds = accountAdminService.getAccounts(accountsFilter).map { it.id }.toSet()
+
+        accountAdminService.deleteAccounts(accountIds)
         repository.deleteById(id)
     }
 

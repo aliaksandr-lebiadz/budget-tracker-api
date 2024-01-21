@@ -1,6 +1,7 @@
 package org.alebiadz.budget.tracker.web.controller.exception
 
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import mu.KotlinLogging
 import org.alebiadz.budget.tracker.dto.error.PropertyValidationErrorDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -9,6 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class ExceptionControllerAdvice {
+
+    companion object {
+
+        val log = KotlinLogging.logger {}
+    }
 
     @ExceptionHandler(MissingKotlinParameterException::class)
     fun handle(e: MissingKotlinParameterException): ResponseEntity<List<PropertyValidationErrorDto>> {
@@ -28,6 +34,8 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler(Exception::class)
     fun handle(e: Exception): ResponseEntity<String> {
+
+        log.error(e) { "Exceptionally" }
 
         return ResponseEntity.internalServerError().body(e.message)
     }

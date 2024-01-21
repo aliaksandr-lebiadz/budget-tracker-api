@@ -3,6 +3,7 @@ package org.alebiadz.budget.tracker.web.controller
 import org.alebiadz.budget.tracker.dto.card.type.CardTypeDto
 import org.alebiadz.budget.tracker.service.card.type.CardTypeService
 import org.alebiadz.budget.tracker.web.meta.Navigation
+import org.alebiadz.budget.tracker.web.security.RequiresAdminRole
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,6 +17,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(Navigation.CARD_TYPE)
+@RequiresAdminRole
 class CardTypeController(private val service: CardTypeService) {
 
     @GetMapping

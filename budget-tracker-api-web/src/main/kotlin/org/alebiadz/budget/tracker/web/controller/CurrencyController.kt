@@ -3,6 +3,7 @@ package org.alebiadz.budget.tracker.web.controller
 import org.alebiadz.budget.tracker.dto.currency.CurrencyDto
 import org.alebiadz.budget.tracker.service.currency.CurrencyService
 import org.alebiadz.budget.tracker.web.meta.Navigation
+import org.alebiadz.budget.tracker.web.security.RequiresAdminRole
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,6 +17,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(Navigation.CURRENCY)
+@RequiresAdminRole
 class CurrencyController(private val service: CurrencyService) {
 
     @GetMapping

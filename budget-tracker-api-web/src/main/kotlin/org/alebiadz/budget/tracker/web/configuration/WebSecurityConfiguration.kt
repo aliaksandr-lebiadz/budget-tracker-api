@@ -1,16 +1,15 @@
 package org.alebiadz.budget.tracker.web.configuration
 
 import org.alebiadz.budget.tracker.service.authentication.AuthenticationService
-import org.alebiadz.budget.tracker.service.meta.UserMeta
 import org.alebiadz.budget.tracker.web.filter.AuthenticationFilter
 import org.alebiadz.budget.tracker.web.filter.AuthorizationFilter
 import org.alebiadz.budget.tracker.web.meta.Navigation
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -23,11 +22,9 @@ import org.springframework.web.cors.CorsConfiguration
 
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
-class WebSecurityConfiguration(
-    private val authenticationService: AuthenticationService,
-    @Value("{server.servlet.context-path}") private val contextPath: String
-) {
+class WebSecurityConfiguration(private val authenticationService: AuthenticationService) {
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
@@ -49,13 +46,7 @@ class WebSecurityConfiguration(
         http.csrf().disable()
         http.cors().configurationSource { corsConfiguration() }
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        http.authorizeRequests().antMatchers(Navigation.USER_PATH_PATTERN, contextPath + Navigation.USER_PATH_PATTERN).permitAll()
-        http.authorizeRequests().antMatchers(
-            Navigation.CURRENCY_PATTERN,
-            Navigation.CARD_TYPE_PATTERN,
-            Navigation.BANK_PATTERN,
-        ).hasRole(UserMeta.ADMIN.uppercase())
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests().anyRequest().permitAll()
 
         http.addFilter(createAuthenticationFilter(authenticationManager))
         http.addFilterAfter(createAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)

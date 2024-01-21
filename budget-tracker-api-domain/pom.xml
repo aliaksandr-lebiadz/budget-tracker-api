@@ -13,6 +13,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.alebiadz</groupId>
+            <artifactId>budget-tracker-api-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>

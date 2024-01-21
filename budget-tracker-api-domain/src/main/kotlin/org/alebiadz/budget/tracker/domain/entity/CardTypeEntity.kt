@@ -12,9 +12,15 @@ import javax.persistence.Table
 @Table(name = "card_types")
 @Suppress("ArrayInDataClass")
 data class CardTypeEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long?,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    override var id: Long?,
+
     val name: String,
-    @Lob @Type(type="org.hibernate.type.BinaryType") val icon: ByteArray
+
+    @Lob
+    @Type(type="org.hibernate.type.BinaryType")
+    val icon: ByteArray,
 ) : JpaEntity {
 
     constructor(name: String, icon: ByteArray) : this(null, name, icon)

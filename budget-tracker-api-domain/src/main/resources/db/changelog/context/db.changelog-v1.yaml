@@ -62,3 +62,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/sql/v1/007_replace_username_with_user_id_in_refresh_tokens_table.sql
+
+  - changeSet:
+      id: 008_add_accounts_table
+      author: alebiadz
+      comment: Add accounts table
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/v1/008_add_accounts_table.sql

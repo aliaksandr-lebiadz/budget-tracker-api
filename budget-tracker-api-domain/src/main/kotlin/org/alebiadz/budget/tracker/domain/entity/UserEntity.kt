@@ -9,9 +9,14 @@ import javax.persistence.Table
 @Entity
 @Table(name = "users")
 data class UserEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long?,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    override var id: Long?,
+
     val username: String,
+
     val password: String,
+
     val admin: Boolean,
 ) : JpaEntity {
 
